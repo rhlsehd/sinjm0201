@@ -1,5 +1,6 @@
 #pragma warning(disable:4996) //c4996 오류 방지
 #define _TM_ // struct 재정의 오류 방지
+#define MAX_LENGTH 128
 #include <stdio.h>
 #include <time.h> //localtime 헤더파일
 #include <windows.h> //system(cls) 헤더파일
@@ -16,11 +17,11 @@ struct tm
 int total = 50000;
 
 void manage();
-void modify();
+void open();
 int main()
 {
 	int sel;
-	printf("1 : 관리\n2 : 수정\n");
+	printf("1 : 관리\n2 : 파일 열기\n");
 	scanf_s("%d", &sel);
 	system("cls");
 
@@ -30,7 +31,7 @@ int main()
 		manage();
 		break;
 	case 2:
-		modify();
+		open();
 		break;
 	}
 	system("pause>null"); 
@@ -39,7 +40,7 @@ int main()
 
 void manage()
 {
-	FILE* fp = fopen("accountbook.txt", "w");
+	FILE* fp = fopen("accountbook.txt", "a");
 	int income, expense;
 	time_t timer;
 	struct tm* t;
@@ -63,7 +64,23 @@ void manage()
 	fclose(fp);
 }
 
-void modify()
+void open()
 {
-	printf("asd");
+	int line_count = 0;
+	char buffer[MAX_LENGTH];
+	FILE* fp = NULL;
+
+	if (0 == fopen_s(&fp, "accountbook.txt", "rt"))
+	{
+		printf("accountbook.txt 파일의 내용은 다음과 같습니다. \n\n");
+	}
+
+	while (fgets(buffer, MAX_LENGTH, fp) != NULL)
+	{
+		line_count++;
+		printf("%s", buffer);
+	}
+	fclose(fp);
+
+	printf("\n\n");
 }
